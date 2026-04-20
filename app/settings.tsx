@@ -1,5 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
-import { ScrollView, Text, View } from "react-native";
+import { router } from "expo-router";
+import { Pressable, ScrollView, Text, View } from "react-native";
+
+import { setIsLoggedIn } from "@/lib/auth";
 
 const rows = [
   { icon: "language-outline", label: "Language", value: "English" },
@@ -9,10 +12,14 @@ const rows = [
     label: "Privacy mode",
     value: "Standard",
   },
-  { icon: "log-out-outline", label: "Sign out", value: "Google account" },
 ] as const;
 
 export default function SettingsScreen() {
+  const handleSignOut = async () => {
+    await setIsLoggedIn(false);
+    router.replace("/login");
+  };
+
   return (
     <ScrollView
       className="flex-1 bg-slate-50"
@@ -39,6 +46,17 @@ export default function SettingsScreen() {
             </View>
           </View>
         ))}
+
+        <Pressable
+          onPress={handleSignOut}
+          className="mt-2 flex-row items-center justify-between rounded-2xl bg-rose-50 px-4 py-4"
+        >
+          <View className="flex-row items-center gap-3">
+            <Ionicons name="log-out-outline" size={20} color="#be123c" />
+            <Text className="text-base text-rose-700">Sign out</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={17} color="#be123c" />
+        </Pressable>
       </View>
     </ScrollView>
   );

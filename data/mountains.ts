@@ -71,22 +71,69 @@ export const MOUNTAINS: MountainInfo[] = [
   },
 ];
 
-const mountainKeywords = ["mountain", "peak", "summit", "alp", "hill", "ridge"];
+const positiveHints = [
+  "mount",
+  "mountain",
+  "peak",
+  "summit",
+  "trail",
+  "hike",
+  "ridge",
+  "alps",
+  "snow",
+  "landscape",
+  "nature",
+];
+
+const negativeHints = [
+  "selfie",
+  "food",
+  "cat",
+  "dog",
+  "document",
+  "receipt",
+  "invoice",
+  "screen",
+  "screenshot",
+  "indoor",
+  "room",
+];
+
+function hashString(value: string): number {
+  let hash = 0;
+
+  for (let index = 0; index < value.length; index += 1) {
+    hash = (hash << 5) - hash + value.charCodeAt(index);
+    hash |= 0;
+  }
+
+  return Math.abs(hash);
+}
 
 export function detectMountainFromUri(uri: string): MountainInfo | null {
   const value = uri.toLowerCase();
-  const hasMountainHint = mountainKeywords.some((keyword) =>
-    value.includes(keyword),
-  );
-
-  if (!hasMountainHint) {
-    return null;
-  }
 
   const match = MOUNTAINS.find((mountain) => value.includes(mountain.id));
   if (match) {
     return match;
   }
 
-  return MOUNTAINS[Math.floor(Math.random() * MOUNTAINS.length)] ?? null;
+  const positive = positiveHints.some((keyword) => value.includes(keyword));
+  const negative = negativeHints.some((keyword) => value.includes(keyword));
+
+  if (negative && !positive) {
+    return null;
+  }
+
+  const hash = hashString(value);
+  const noMountainGate = hash % 100;
+
+  // Keep "no mountain found" possible, but not dominant for normal photos.
+  if (!positive && noMountainGate < 18) {
+    return null;
+  }
+
+  const selectedIndex = hash % MOUNTAINS.length;
+
+  return MOUNTAINS[selectedIndex] ?? null;
 }
