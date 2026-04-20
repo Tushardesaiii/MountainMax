@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
+import { Platform } from "react-native";
 
 import { HapticTab } from "@/components/haptic-tab";
 import { Colors } from "@/constants/theme";
@@ -15,12 +16,28 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         tabBarInactiveTintColor: "#64748b",
         tabBarStyle: {
-          backgroundColor: "#ffffffee",
-          borderTopWidth: 0,
-          height: 76,
-          paddingBottom: 10,
-          paddingTop: 8,
-          position: "absolute",
+          backgroundColor: Platform.OS === "android" ? "#ffffff" : "#f8fbff",
+          borderTopWidth: 1,
+          borderTopColor: Platform.OS === "android" ? "#e2e8f0" : "#d9eaf4",
+          height: Platform.OS === "android" ? 72 : 82,
+          paddingBottom: Platform.OS === "android" ? 8 : 12,
+          paddingTop: Platform.OS === "android" ? 6 : 8,
+          shadowColor: "#0f172a",
+          shadowOpacity: Platform.OS === "android" ? 0.05 : 0.08,
+          shadowRadius: Platform.OS === "android" ? 10 : 14,
+          shadowOffset: { width: 0, height: -4 },
+          elevation: Platform.OS === "android" ? 8 : 12,
+        },
+        tabBarLabelStyle: {
+          fontSize: Platform.OS === "android" ? 12 : 11,
+          fontWeight: Platform.OS === "android" ? "600" : "700",
+          letterSpacing: 0.2,
+          paddingBottom: Platform.OS === "android" ? 1 : 2,
+        },
+        tabBarItemStyle: {
+          flex: 1,
+          minWidth: 0,
+          paddingTop: Platform.OS === "android" ? 0 : 2,
         },
         headerShown: false,
         tabBarButton: HapticTab,
@@ -30,8 +47,12 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Scan",
-          tabBarIcon: ({ color }) => (
-            <Ionicons size={24} name="scan" color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              size={23}
+              name={focused ? "scan" : "scan-outline"}
+              color={color}
+            />
           ),
         }}
       />
@@ -39,8 +60,12 @@ export default function TabLayout() {
         name="explore"
         options={{
           title: "Discover",
-          tabBarIcon: ({ color }) => (
-            <Ionicons size={24} name="compass-outline" color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              size={23}
+              name={focused ? "compass" : "compass-outline"}
+              color={color}
+            />
           ),
         }}
       />
@@ -48,8 +73,12 @@ export default function TabLayout() {
         name="account"
         options={{
           title: "Account",
-          tabBarIcon: ({ color }) => (
-            <Ionicons size={24} name="person-circle-outline" color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              size={23}
+              name={focused ? "person-circle" : "person-circle-outline"}
+              color={color}
+            />
           ),
         }}
       />

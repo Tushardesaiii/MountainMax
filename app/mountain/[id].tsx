@@ -9,13 +9,21 @@ export default function MountainDetailsScreen() {
 
   return (
     <>
-      <Stack.Screen options={{ title: mountain?.name ?? "Mountain Details" }} />
+      <Stack.Screen
+        options={{
+          title: mountain?.name ?? "Mountain Details",
+          headerStyle: { backgroundColor: "#0F766E" },
+          headerTintColor: "#fff",
+          headerTitleStyle: { fontWeight: "700" },
+          headerShadowVisible: false,
+        }}
+      />
       <ScrollView
         className="flex-1 bg-slate-50"
         contentContainerStyle={{ padding: 20 }}
       >
         {mountain ? (
-          <View className="rounded-3xl bg-white p-5">
+          <View className="rounded-3xl bg-white p-3">
             <Text className="text-2xl font-semibold text-slate-900">
               {mountain.name}
             </Text>

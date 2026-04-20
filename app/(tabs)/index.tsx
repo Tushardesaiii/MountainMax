@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
@@ -17,6 +18,7 @@ import { MountainInfo, detectMountainFromUri } from "@/data/mountains";
 type ScanState = "idle" | "analyzing" | "result" | "no-mountain";
 
 export default function ScanScreen() {
+  const tabBarHeight = useBottomTabBarHeight();
   const [scanState, setScanState] = useState<ScanState>("idle");
   const [selectedUri, setSelectedUri] = useState<string | null>(null);
   const [mountain, setMountain] = useState<MountainInfo | null>(null);
@@ -64,22 +66,46 @@ export default function ScanScreen() {
 
   return (
     <LinearGradient
-      colors={["#dff6ff", "#ecf9ff", "#f8fcff"]}
+      colors={["#cfeeff", "#e8f8ff", "#f7fdff"]}
       className="flex-1"
     >
-      <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 40 }}>
-        <Text className="text-3xl font-semibold text-slate-900">
-          MountainMax
-        </Text>
-        <Text className="mt-2 text-base leading-7 text-slate-700">
-          Scan a mountain photo to discover what it is, how it formed, and what
-          adventure value it offers.
-        </Text>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+          paddingTop: 20,
+          paddingBottom: tabBarHeight + 32,
+        }}
+      >
+        <View className="rounded-3xl bg-white/95 p-5 shadow-sm">
+          <View className="flex-row items-center justify-between">
+            <View>
+              <Text className="text-xs font-semibold uppercase tracking-[2px] text-teal-800">
+                Alpine Intelligence
+              </Text>
+              <Text className="mt-2 text-3xl font-bold text-slate-900">
+                MountainMax
+              </Text>
+            </View>
+
+            <LinearGradient
+              colors={["#0f766e", "#155e75"]}
+              className="h-14 w-14 items-center justify-center rounded-2xl"
+            >
+              <Ionicons name="triangle" size={24} color="#ffffff" />
+            </LinearGradient>
+          </View>
+
+          <Text className="mt-4 text-base leading-7 text-slate-700">
+            Professional mountain scanning powered by terrain recognition,
+            geology matching, and expedition-level insights.
+          </Text>
+        </View>
 
         <View className="mt-6 gap-3">
           <Pressable
             onPress={handleCamera}
-            className="flex-row items-center justify-center gap-2 rounded-2xl bg-teal-700 py-4"
+            className="flex-row items-center justify-center gap-2 rounded-2xl bg-teal-700 py-4 shadow-sm"
           >
             <Ionicons name="camera-outline" size={20} color="#ffffff" />
             <Text className="text-base font-semibold text-white">
@@ -89,7 +115,7 @@ export default function ScanScreen() {
 
           <Pressable
             onPress={handleGallery}
-            className="flex-row items-center justify-center gap-2 rounded-2xl bg-slate-900 py-4"
+            className="flex-row items-center justify-center gap-2 rounded-2xl bg-slate-900 py-4 shadow-sm"
           >
             <Ionicons name="images-outline" size={20} color="#ffffff" />
             <Text className="text-base font-semibold text-white">
@@ -99,7 +125,7 @@ export default function ScanScreen() {
         </View>
 
         {selectedUri ? (
-          <View className="mt-6 overflow-hidden rounded-3xl bg-white/85">
+          <View className="mt-6 overflow-hidden rounded-3xl border border-white/80 bg-white/85">
             <Image
               source={{ uri: selectedUri }}
               style={{ width: "100%", height: 220 }}
@@ -109,7 +135,7 @@ export default function ScanScreen() {
         ) : null}
 
         {scanState === "analyzing" ? (
-          <View className="mt-6 rounded-3xl bg-white/90 p-5">
+          <View className="mt-6 rounded-3xl bg-white/95 p-5">
             <View className="flex-row items-center gap-3">
               <ActivityIndicator color="#0f766e" />
               <Text className="text-base text-slate-800">
@@ -120,7 +146,7 @@ export default function ScanScreen() {
         ) : null}
 
         {scanState === "result" && mountain ? (
-          <View className="mt-6 rounded-3xl bg-white/95 p-5">
+          <View className="mt-6 rounded-3xl border border-white/80 bg-white/95 p-5">
             <Text className="text-2xl font-semibold text-slate-900">
               {mountain.name}
             </Text>
@@ -155,7 +181,7 @@ export default function ScanScreen() {
         ) : null}
 
         {scanState === "no-mountain" ? (
-          <View className="mt-6 rounded-3xl bg-white/95 p-5">
+          <View className="mt-6 rounded-3xl border border-white/80 bg-white/95 p-5">
             <Text className="text-xl font-semibold text-slate-900">
               No mountain found
             </Text>
