@@ -1,78 +1,179 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { LinearGradient } from "expo-linear-gradient";
-import { ScrollView, Text, View } from "react-native";
+import { Link } from "expo-router";
+import { Image, Pressable, ScrollView, Text, View } from "react-native";
 
 import { MOUNTAINS } from "@/data/mountains";
 
-const learningCards = [
-  {
-    title: "How mountain detection works",
-    body: "MountainMax evaluates slope profile, ridgeline shape, horizon composition, and texture context.",
-    icon: "hardware-chip-outline",
-  },
-  {
-    title: "Preparation essentials",
-    body: "Pack layered clothing, hydration tools, emergency contacts, and weather-aware route plans.",
-    icon: "medkit-outline",
-  },
-  {
-    title: "Trail etiquette",
-    body: "Leave no trace, respect local culture, and prioritize nature-safe adventure behavior.",
-    icon: "leaf-outline",
-  },
-] as const;
-
 export default function DiscoverScreen() {
+  const tabBarHeight = useBottomTabBarHeight();
+
+  const featured = MOUNTAINS.slice(0, 4);
+
   return (
     <LinearGradient
-      colors={["#f4fbff", "#def2fb", "#edf5ff"]}
+      colors={["#f8fbff", "#ffffff", "#ffffff"]}
       className="flex-1"
     >
-      <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 32 }}>
-        <Text className="text-3xl font-semibold text-slate-900">Discover</Text>
-        <Text className="mt-2 text-sm leading-6 text-slate-700">
-          Explore mountain intelligence, planning hints, and practical knowledge
-          before your next climb.
-        </Text>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+          paddingTop: 18,
+          paddingBottom: tabBarHeight + 30,
+        }}
+      >
+        {/* Header */}
+        <View className="flex-row items-center justify-between">
+          <View>
+            <Text className="text-sm text-slate-500">Explore the world</Text>
+            <Text className="mt-1 text-3xl font-bold text-slate-900">
+              Discover Mountains
+            </Text>
+          </View>
 
-        <View className="mt-6 gap-3">
-          {learningCards.map((card) => (
-            <View key={card.title} className="rounded-3xl bg-white/90 p-5">
-              <View className="flex-row items-start gap-3">
-                <View className="h-10 w-10 items-center justify-center rounded-xl bg-alpine-100">
-                  <Ionicons name={card.icon} size={20} color="#0f766e" />
-                </View>
-                <View className="flex-1">
-                  <Text className="text-base font-semibold text-slate-900">
-                    {card.title}
+          
+        </View>
+
+        {/* Hero Card */}
+        <LinearGradient
+          colors={["#0f766e", "#0ea5a4"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          className="mt-6 rounded-[30px] p-6"
+        >
+          <Text className="text-xs font-semibold tracking-[2px] text-white">
+            MOUNTAINMAX PICKS
+          </Text>
+
+          <Text className="mt-3 text-3xl font-bold text-white leading-tight">
+            Plan Your Next
+            {"\n"}Adventure Escape
+          </Text>
+
+          <Text className="mt-3 text-sm leading-6 text-white">
+            Find peaks, seasons, routes and climb difficulty instantly.
+          </Text>
+
+          <Pressable className="mt-5 p-4 self-start rounded-full bg-white px-5 py-3 active:scale-[0.97]">
+            <Text className="text-sm font-semibold text-slate-900">
+              {/* search icon */}
+              
+ <Ionicons name="search-outline" size={22} color="#0f172a" />
+ 
+            </Text>
+          </Pressable>
+        </LinearGradient>
+
+        {/* Quick Filters */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          className="mt-6"
+        >
+          <View className="flex-row gap-3">
+            {["Popular", "Beginner", "Snow Peaks", "Asia", "Adventure"].map(
+              (item) => (
+                <View
+                  key={item}
+                  className="rounded-full border border-slate-200 bg-white px-5 py-3"
+                >
+                  <Text className="text-sm font-medium text-slate-700">
+                    {item}
                   </Text>
-                  <Text className="mt-2 text-sm leading-6 text-slate-700">
-                    {card.body}
-                  </Text>
                 </View>
-              </View>
-            </View>
+              )
+            )}
+          </View>
+        </ScrollView>
+
+        {/* Featured */}
+        <View className="mt-8 flex-row items-center justify-between">
+          <Text className="text-2xl font-bold text-slate-900">
+            Featured Peaks
+          </Text>
+
+          <Text className="text-sm font-semibold text-teal-700">
+            See all
+          </Text>
+        </View>
+
+        <View className="mt-5 gap-5">
+          {featured.map((item, index) => (
+            <Link key={item.id} href={`/mountain/${item.id}`} asChild>
+              <Pressable className="overflow-hidden rounded-[28px] bg-white  shadow-sm border border-slate-100 active:scale-[0.985]">
+                {/* Image */}
+                <Image
+                  source={{
+                    uri:
+                      index % 2 === 0
+                        ? "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80"
+                        : "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+                  }}
+                  className="h-52 w-full"
+                  resizeMode="cover"
+                />
+
+                {/* Content */}
+                <View className="p-5">
+                  <View className="flex-row items-start justify-between">
+                    <View className="flex-1 pr-4">
+                      <Text className="text-xl font-bold text-slate-900">
+                        {item.name}
+                      </Text>
+
+                      <Text className="mt-1 text-sm text-slate-500">
+                        {item.country}
+                      </Text>
+                    </View>
+
+                    <View className="rounded-full bg-slate-100 px-3 py-2">
+                      <Text className="text-xs font-semibold text-slate-700">
+                        {item.heightMeters} m
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View className="mt-4 flex-row gap-2">
+                    <View className="rounded-full bg-teal-50 px-4 py-2">
+                      <Text className="text-xs font-semibold text-teal-700">
+                        {item.challengeLevel}
+                      </Text>
+                    </View>
+
+                    <View className="rounded-full bg-orange-50 px-4 py-2">
+                      <Text className="text-xs font-semibold text-orange-700">
+                        {item.bestSeason}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </Pressable>
+            </Link>
           ))}
         </View>
 
-        <Text className="mt-7 text-lg font-semibold text-slate-900">
-          Featured mountains
-        </Text>
-        <View className="mt-3 gap-3">
-          {MOUNTAINS.map((item) => (
-            <View key={item.id} className="rounded-2xl bg-white/90 px-4 py-4">
-              <Text className="text-base font-semibold text-slate-900">
-                {item.name}
-              </Text>
-              <Text className="mt-1 text-sm text-slate-600">
-                {item.country}
-              </Text>
-              <Text className="mt-2 text-xs text-slate-500">
-                Best season: {item.bestSeason}
-              </Text>
-            </View>
-          ))}
-        </View>
+        {/* Bottom CTA */}
+        <LinearGradient
+          colors={["#111827", "#1e293b"]}
+          className="mt-8 rounded-[28px] p-6"
+        >
+          <Text className="text-2xl font-bold text-white">
+            Ready to Scan?
+          </Text>
+
+          <Text className="mt-2 text-sm leading-6 text-white">
+            Upload any mountain image and get instant intelligence.
+          </Text>
+
+          <View className="mt-5 flex-row items-center gap-2">
+            <Ionicons name="scan-outline" size={18} color="#fff" />
+            <Text className="text-sm font-semibold text-white">
+              Open Scanner
+            </Text>
+          </View>
+        </LinearGradient>
       </ScrollView>
     </LinearGradient>
   );
