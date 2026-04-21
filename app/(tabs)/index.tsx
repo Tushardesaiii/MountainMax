@@ -141,11 +141,11 @@ export default function ScanScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingHorizontal: 20,
-            paddingTop: 20,
+            paddingTop: 70,
             paddingBottom: tabBarHeight + 32,
           }}
         >
-          <View className="rounded-3xl border border-white/20 bg-white/10 p-5">
+          <View className="rounded-3xl border mt-12  border-white/20 bg-white/10 p-5">
             <View className="flex-row items-center justify-between">
               <View>
                 <Text className="text-xs font-semibold uppercase tracking-[2px] text-cyan-100">
@@ -186,7 +186,10 @@ export default function ScanScreen() {
             </View>
           </View>
 
-          <View className="mt-6 rounded-3xl border border-slate-200 bg-white/95 p-4 shadow-sm">
+          <View
+            className="mt-6 rounded-3xl border border-slate-200 bg-white/95 p-4"
+            style={{ boxShadow: "0px 4px 16px rgba(15, 23, 42, 0.08)" }}
+          >
             <Text className="text-sm font-semibold uppercase tracking-[1.5px] text-slate-500">
               Start Scan
             </Text>

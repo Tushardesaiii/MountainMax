@@ -59,15 +59,31 @@ export default function AccountScreen() {
     <View className="flex-1 bg-slate-50">
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ padding: 18, paddingBottom: 36 }}
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+          paddingTop: 28,
+          paddingBottom: 44,
+        }}
       >
-        <View className="overflow-hidden rounded-[30px] border border-slate-200 bg-white px-5 pb-5 pt-4">
-          <View className="mb-4 flex-row items-center justify-between">
-            <Text className="text-sm font-medium tracking-wide text-slate-500">
-              MOUNTAINMAX PROFILE
-            </Text>
-            <Pressable className="h-9 w-9 items-center justify-center rounded-full bg-slate-100">
-              <Ionicons name="create-outline" size={17} color="#0f172a" />
+        <View
+          className="overflow-hidden rounded-[34px] border border-slate-200 bg-white px-5 pb-5 pt-5"
+          style={{
+            borderRadius: 34,
+            overflow: "hidden",
+            boxShadow: "0px 8px 24px rgba(15, 23, 42, 0.06)",
+          }}
+        >
+          <View className="mb-5 flex-row items-center justify-between">
+            <View>
+              <Text className="text-xs font-semibold uppercase tracking-[2px] text-teal-700">
+                MountainMax Profile
+              </Text>
+              <Text className="mt-1 text-sm text-slate-500">
+                Your stats, progress, and saved places.
+              </Text>
+            </View>
+            <Pressable className="h-10 w-10 items-center justify-center rounded-full bg-slate-100 active:scale-[0.98]">
+              <Ionicons name="create-outline" size={18} color="#0f172a" />
             </Pressable>
           </View>
 
@@ -121,7 +137,14 @@ export default function AccountScreen() {
           </View>
         </View>
 
-        <View className="mt-5 rounded-3xl border border-slate-200 bg-white p-5">
+        <View
+          className="mt-6 rounded-3xl border border-slate-200 bg-white p-5"
+          style={{
+            borderRadius: 30,
+            overflow: "hidden",
+            boxShadow: "0px 6px 18px rgba(15, 23, 42, 0.05)",
+          }}
+        >
           <View className="flex-row items-center justify-between">
             <Text className="text-lg font-semibold text-slate-900">
               Performance Snapshot
@@ -150,7 +173,14 @@ export default function AccountScreen() {
           </View>
         </View>
 
-        <View className="mt-5 rounded-3xl border border-slate-200 bg-white p-5">
+        <View
+          className="mt-5 rounded-3xl border border-slate-200 bg-white p-5"
+          style={{
+            borderRadius: 30,
+            overflow: "hidden",
+            boxShadow: "0px 6px 18px rgba(15, 23, 42, 0.05)",
+          }}
+        >
           <View className="flex-row items-center justify-between">
             <Text className="text-lg font-semibold text-slate-900">
               Weekly Activity
@@ -175,11 +205,16 @@ export default function AccountScreen() {
           </View>
         </View>
 
-        <View className="mt-5 gap-3">
+        <View className="mt-6 gap-3">
           {quickActions.map((item) => (
             <Pressable
               key={item.title}
               className="flex-row items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-4"
+              style={{
+                borderRadius: 16,
+                overflow: "hidden",
+                boxShadow: "0px 4px 14px rgba(15, 23, 42, 0.04)",
+              }}
             >
               <View className="flex-row items-center gap-3">
                 <View className="h-10 w-10 items-center justify-center rounded-full bg-slate-100">
@@ -199,7 +234,14 @@ export default function AccountScreen() {
           ))}
         </View>
 
-        <View className="mt-5 rounded-3xl border border-slate-200 bg-white p-5">
+        <View
+          className="mt-5 rounded-3xl border border-slate-200 bg-white p-5"
+          style={{
+            borderRadius: 30,
+            overflow: "hidden",
+            boxShadow: "0px 6px 18px rgba(15, 23, 42, 0.05)",
+          }}
+        >
           <Text className="text-lg font-semibold text-slate-900">
             Achievement Vault
           </Text>

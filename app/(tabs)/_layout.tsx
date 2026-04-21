@@ -22,10 +22,7 @@ export default function TabLayout() {
           height: Platform.OS === "android" ? 72 : 82,
           paddingBottom: Platform.OS === "android" ? 8 : 12,
           paddingTop: Platform.OS === "android" ? 6 : 8,
-          shadowColor: "#0f172a",
-          shadowOpacity: Platform.OS === "android" ? 0.05 : 0.08,
-          shadowRadius: Platform.OS === "android" ? 10 : 14,
-          shadowOffset: { width: 0, height: -4 },
+          boxShadow: "0px -10px 28px rgba(15, 23, 42, 0.10)",
           elevation: Platform.OS === "android" ? 8 : 12,
         },
         tabBarLabelStyle: {

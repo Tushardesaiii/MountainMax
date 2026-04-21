@@ -33,21 +33,26 @@ export default function LoginScreen() {
             Sign in to start scanning mountains, saving discoveries, and getting
             smarter adventure.
           </Text>
-          <Image
-            source={{
-              uri: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
-            }}
-            style={{ width: "100%", height: 220 }}
-            resizeMode="cover"
-            className="rounded-full mt-6"
-          />
+          <View
+            className="mt-6 overflow-hidden rounded-[34px] border border-white/80 bg-white"
+            style={{ borderRadius: 34 }}
+          >
+            <Image
+              source={{
+                uri: "https://images.pexels.com/photos/29038684/pexels-photo-29038684.jpeg",
+              }}
+              style={{ width: "100%", height: 220, borderRadius: 34 }}
+              resizeMode="cover"
+            />
+          </View>
         </View>
 
         <View className="gap-3">
           <Pressable
             disabled={loading}
             onPress={handleLogin}
-             className="flex-row items-center justify-center gap-3 rounded-2xl bg-slate-900 py-4"
+            className="flex-row items-center justify-center gap-3 bg-slate-900 py-4"
+            style={{ borderRadius: 20, overflow: "hidden" }}
           >
             <Ionicons name="logo-google" size={18} color="#fff" />
             <Text className="text-base font-semibold text-white">
@@ -58,7 +63,8 @@ export default function LoginScreen() {
           <Pressable
             disabled={loading}
             onPress={handleLogin}
-            className="flex-row items-center justify-center gap-3 rounded-2xl bg-teal-700 py-4"
+            className="flex-row items-center justify-center gap-3 bg-teal-700 py-4"
+            style={{ borderRadius: 20, overflow: "hidden" }}
           >
             <Ionicons name="call-outline" size={19} color="#fff" />
             <Text className="text-base font-semibold text-white">

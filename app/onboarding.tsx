@@ -3,23 +3,23 @@ import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  ActivityIndicator,
-  Animated,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  StatusBar,
-  Switch,
-  Text,
-  TextInput,
-  View,
+    ActivityIndicator,
+    Animated,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    ScrollView,
+    StatusBar,
+    Switch,
+    Text,
+    TextInput,
+    View,
 } from "react-native";
 
 import {
-  ExperienceLevel,
-  saveOnboardingProfile,
-  setOnboardingComplete,
+    ExperienceLevel,
+    saveOnboardingProfile,
+    setOnboardingComplete,
 } from "@/lib/onboarding";
 
 const totalSteps = 3;
@@ -43,13 +43,9 @@ export default function OnboardingScreen() {
   const [step, setStep] = useState(0);
   const [fullName, setFullName] = useState("");
   const [homeCountry, setHomeCountry] = useState("");
-  const [experience, setExperience] =
-    useState<ExperienceLevel>("Beginner");
-  const [goals, setGoals] = useState<string[]>([
-    "Peak identification",
-  ]);
-  const [notificationsEnabled, setNotificationsEnabled] =
-    useState(true);
+  const [experience, setExperience] = useState<ExperienceLevel>("Beginner");
+  const [goals, setGoals] = useState<string[]>(["Peak identification"]);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
   const fade = useRef(new Animated.Value(0)).current;
@@ -63,12 +59,12 @@ export default function OnboardingScreen() {
       Animated.timing(fade, {
         toValue: 1,
         duration: 320,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }),
       Animated.timing(moveY, {
         toValue: 0,
         duration: 320,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }),
     ]).start();
   }, [step]);
@@ -78,15 +74,12 @@ export default function OnboardingScreen() {
   }, [step]);
 
   const canStep1 =
-    fullName.trim().length >= 2 &&
-    homeCountry.trim().length >= 2;
+    fullName.trim().length >= 2 && homeCountry.trim().length >= 2;
 
   const canStep2 = goals.length > 0;
 
   const disabled =
-    submitting ||
-    (step === 0 && !canStep1) ||
-    (step === 1 && !canStep2);
+    submitting || (step === 0 && !canStep1) || (step === 1 && !canStep2);
 
   const toggleGoal = (goal: string) => {
     setGoals((prev) => {
@@ -144,62 +137,70 @@ export default function OnboardingScreen() {
 
       <KeyboardAvoidingView
         className="flex-1"
-        behavior={
-          Platform.OS === "ios" ? "padding" : undefined
-        }
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            paddingHorizontal: 22,
-            paddingTop: 64,
-            paddingBottom: 36,
+            paddingHorizontal: 20,
+            paddingTop: 24,
+            paddingBottom: 40,
           }}
         >
           {/* HEADER */}
-          <View>
-            <View className="flex-row items-center justify-between">
-              <View className="h-14 w-14 items-center justify-center rounded-3xl bg-teal-50">
-                <Ionicons
-                  name="navigate-outline"
-                  size={24}
-                  color="#0f766e"
-                />
+          <LinearGradient
+            colors={["#0f172a", "#0f766e"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            className="overflow-hidden rounded-[34px] p-5"
+            style={{
+              borderRadius: 34,
+              overflow: "hidden",
+              boxShadow: "0px 10px 28px rgba(15, 23, 42, 0.14)",
+            }}
+          >
+            <View className="flex-row items-start justify-between gap-4">
+              <View className="flex-1 pr-2">
+                <Text className="text-xs font-semibold uppercase tracking-[2px] text-cyan-100">
+                  Step {step + 1} of {totalSteps}
+                </Text>
+
+                <Text className="mt-3 text-[32px] font-bold leading-[38px] text-white">
+                  Build your{"\n"}Explorer Profile
+                </Text>
+
+                <Text className="mt-3 text-[15px] leading-7 text-cyan-50">
+                  Personalized mountain scans, smarter recommendations, routes,
+                  and weather insights.
+                </Text>
               </View>
 
-              <Text className="text-sm font-medium text-slate-500">
-                Step {step + 1}/{totalSteps}
-              </Text>
+              <View className="h-12 w-12 items-center justify-center rounded-2xl bg-white/15">
+                <Ionicons name="navigate-outline" size={24} color="#ffffff" />
+              </View>
             </View>
 
-            <Text className="mt-8 text-[34px] font-bold leading-[42px] text-slate-900">
-              Build your{"\n"}Explorer Profile
-            </Text>
-
-            <Text className="mt-4 text-[15px] leading-7 text-slate-500">
-              Personalized mountain scans, smarter
-              recommendations, routes, and weather
-              insights.
-            </Text>
-
-            <View className="mt-7 h-2 rounded-full bg-slate-100 overflow-hidden">
+            <View className="mt-5 h-2 rounded-full bg-white/15 overflow-hidden">
               <LinearGradient
-                colors={["#14b8a6", "#0f766e"]}
+                colors={["#67e8f9", "#ffffff"]}
                 style={{
                   width: progress,
                   height: "100%",
                 }}
               />
             </View>
-          </View>
+          </LinearGradient>
 
           {/* CARD */}
           <Animated.View
             style={{
               opacity: fade,
               transform: [{ translateY: moveY }],
+              borderRadius: 30,
+              overflow: "hidden",
+              boxShadow: "0px 8px 24px rgba(15, 23, 42, 0.08)",
             }}
-            className="mt-10 rounded-[30px] border border-slate-100 bg-white px-6 py-7 shadow-sm"
+            className="mt-5 rounded-[30px] border border-slate-100 bg-white px-5 py-6"
           >
             {/* STEP 1 */}
             {step === 0 && (
@@ -209,11 +210,10 @@ export default function OnboardingScreen() {
                 </Text>
 
                 <Text className="mt-3 text-[15px] leading-7 text-slate-500">
-                  Start with a few details to personalize
-                  your experience.
+                  Start with a few details to personalize your experience.
                 </Text>
 
-                <View className="mt-8 gap-5">
+                <View className="mt-7 gap-4">
                   <View>
                     <Text className="mb-3 text-xs font-semibold uppercase tracking-[1px] text-slate-500">
                       Full Name
@@ -224,7 +224,7 @@ export default function OnboardingScreen() {
                       onChangeText={setFullName}
                       placeholder="Aarav Explorer"
                       placeholderTextColor="#94a3b8"
-                      className="rounded-2xl bg-slate-50 px-5 py-4 text-base text-slate-900"
+                      className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-base text-slate-900"
                     />
                   </View>
 
@@ -238,7 +238,7 @@ export default function OnboardingScreen() {
                       onChangeText={setHomeCountry}
                       placeholder="India"
                       placeholderTextColor="#94a3b8"
-                      className="rounded-2xl bg-slate-50 px-5 py-4 text-base text-slate-900"
+                      className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-base text-slate-900"
                     />
                   </View>
                 </View>
@@ -253,25 +253,21 @@ export default function OnboardingScreen() {
                 </Text>
 
                 <Text className="mt-3 text-[15px] leading-7 text-slate-500">
-                  Choose your level and what matters
-                  most to you.
+                  Choose your level and what matters most to you.
                 </Text>
 
-                <Text className="mt-8 mb-4 text-xs font-semibold uppercase tracking-[1px] text-slate-500">
+                <Text className="mt-7 mb-4 text-xs font-semibold uppercase tracking-[1px] text-slate-500">
                   Experience Level
                 </Text>
 
                 <View className="gap-3">
                   {experienceLevels.map((item) => {
-                    const selected =
-                      item === experience;
+                    const selected = item === experience;
 
                     return (
                       <Pressable
                         key={item}
-                        onPress={() =>
-                          setExperience(item)
-                        }
+                        onPress={() => setExperience(item)}
                         className={
                           selected
                             ? "rounded-2xl border border-teal-600 bg-teal-50 px-5 py-4"
@@ -292,21 +288,18 @@ export default function OnboardingScreen() {
                   })}
                 </View>
 
-                <Text className="mt-8 mb-4 text-xs font-semibold uppercase tracking-[1px] text-slate-500">
+                <Text className="mt-7 mb-4 text-xs font-semibold uppercase tracking-[1px] text-slate-500">
                   Goals (Max 3)
                 </Text>
 
                 <View className="flex-row flex-wrap gap-3">
                   {goalChoices.map((goal) => {
-                    const selected =
-                      goals.includes(goal);
+                    const selected = goals.includes(goal);
 
                     return (
                       <Pressable
                         key={goal}
-                        onPress={() =>
-                          toggleGoal(goal)
-                        }
+                        onPress={() => toggleGoal(goal)}
                         className={
                           selected
                             ? "rounded-full border border-teal-600 bg-teal-50 px-4 py-3"
@@ -337,11 +330,13 @@ export default function OnboardingScreen() {
                 </Text>
 
                 <Text className="mt-3 text-[15px] leading-7 text-slate-500">
-                  Enable alerts and complete your
-                  personalized setup.
+                  Enable alerts and complete your personalized setup.
                 </Text>
 
-                <View className="mt-8 rounded-3xl bg-slate-50 p-5">
+                <View
+                  className="mt-7 rounded-3xl border border-slate-200 bg-slate-50 p-5"
+                  style={{ borderRadius: 24, overflow: "hidden" }}
+                >
                   <View className="flex-row items-center justify-between">
                     <View className="flex-1 pr-5">
                       <Text className="font-semibold text-slate-900">
@@ -349,16 +344,13 @@ export default function OnboardingScreen() {
                       </Text>
 
                       <Text className="mt-2 text-xs leading-6 text-slate-500">
-                        Weather, reminders, route
-                        updates, and weekly progress.
+                        Weather, reminders, route updates, and weekly progress.
                       </Text>
                     </View>
 
                     <Switch
                       value={notificationsEnabled}
-                      onValueChange={
-                        setNotificationsEnabled
-                      }
+                      onValueChange={setNotificationsEnabled}
                       trackColor={{
                         false: "#cbd5e1",
                         true: "#0f766e",
@@ -368,14 +360,16 @@ export default function OnboardingScreen() {
                   </View>
                 </View>
 
-                <View className="mt-6 rounded-3xl border border-teal-100 bg-teal-50 p-5">
+                <View
+                  className="mt-5 rounded-3xl border border-teal-100 bg-teal-50 p-5"
+                  style={{ borderRadius: 24, overflow: "hidden" }}
+                >
                   <Text className="text-xs font-semibold uppercase tracking-[1px] text-teal-700">
                     Summary
                   </Text>
 
                   <Text className="mt-3 text-sm leading-6 text-slate-700">
-                    {fullName || "Explorer"} •{" "}
-                    {homeCountry || "Global"} •{" "}
+                    {fullName || "Explorer"} • {homeCountry || "Global"} •{" "}
                     {experience}
                   </Text>
                 </View>
@@ -384,7 +378,7 @@ export default function OnboardingScreen() {
           </Animated.View>
 
           {/* ACTION */}
-          <View className="mt-10 gap-4">
+          <View className="mt-8 gap-4">
             <Pressable
               disabled={disabled}
               onPress={handleContinue}
@@ -392,33 +386,24 @@ export default function OnboardingScreen() {
             >
               <LinearGradient
                 colors={
-                  disabled
-                    ? ["#cbd5e1", "#cbd5e1"]
-                    : ["#14b8a6", "#0f766e"]
+                  disabled ? ["#cbd5e1", "#cbd5e1"] : ["#14b8a6", "#0f766e"]
                 }
                 className="items-center py-4"
               >
                 {submitting ? (
                   <View className="flex-row items-center gap-2">
                     <ActivityIndicator color="#fff" />
-                    <Text className="font-semibold text-white">
-                      Saving...
-                    </Text>
+                    <Text className="font-semibold text-white">Saving...</Text>
                   </View>
                 ) : (
                   <Text className="text-base font-semibold text-white">
-                    {step === totalSteps - 1
-                      ? "Finish Setup"
-                      : "Continue"}
+                    {step === totalSteps - 1 ? "Finish Setup" : "Continue"}
                   </Text>
                 )}
               </LinearGradient>
             </Pressable>
 
-            <Pressable
-              onPress={handleBack}
-              className="items-center py-2"
-            >
+            <Pressable onPress={handleBack} className="items-center py-2">
               <Text className="font-medium text-slate-500">
                 {step === 0 ? "Back" : "Previous"}
               </Text>

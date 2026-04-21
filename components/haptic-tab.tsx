@@ -16,29 +16,32 @@ export function HapticTab(props: BottomTabBarButtonProps) {
         toValue: isFocused ? 1 : 0.98,
         friction: 8,
         tension: 150,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }),
 
       Animated.timing(bgOpacity, {
         toValue: isFocused ? 1 : 0,
         duration: 220,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }),
     ]).start();
   }, [isFocused]);
 
-  const onPressIn = async (ev: any) => {
-    if (Platform.OS === "ios") {
-      await Haptics.selectionAsync();
-    }
-
+  const onPressIn = (ev: any) => {
     props.onPressIn?.(ev);
+
+    if (Platform.OS === "ios") {
+      void Haptics.selectionAsync();
+    }
   };
 
   return (
     <PlatformPressable
       {...props}
       onPressIn={onPressIn}
+      hitSlop={10}
+      pressRetentionOffset={12}
+      android_disableSound
       style={[
         props.style,
         {
@@ -46,6 +49,7 @@ export function HapticTab(props: BottomTabBarButtonProps) {
           alignItems: "center",
           justifyContent: "center",
           minWidth: 0,
+          alignSelf: "stretch",
           paddingVertical: Platform.OS === "android" ? 6 : 8,
         },
       ]}

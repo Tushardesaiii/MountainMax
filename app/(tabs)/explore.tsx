@@ -20,20 +20,37 @@ export default function DiscoverScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingHorizontal: 20,
-          paddingTop: 18,
-          paddingBottom: tabBarHeight + 30,
+          paddingTop: 28,
+          paddingBottom: tabBarHeight + 36,
         }}
       >
         {/* Header */}
-        <View className="flex-row items-center justify-between">
-          <View>
-            <Text className="text-sm text-slate-500">Explore the world</Text>
-            <Text className="mt-1 text-3xl font-bold text-slate-900">
-              Discover Mountains
-            </Text>
-          </View>
+        <View
+          className="rounded-[30px] border border-slate-200 bg-white px-5 py-5"
+          style={{
+            borderRadius: 30,
+            overflow: "hidden",
+            boxShadow: "0px 8px 24px rgba(15, 23, 42, 0.06)",
+          }}
+        >
+          <View className="flex-row items-start justify-between">
+            <View className="flex-1 pr-4">
+              <Text className="text-xs font-semibold uppercase tracking-[2px] text-teal-700">
+                Explore the world
+              </Text>
+              <Text className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
+                Discover Mountains
+              </Text>
+              <Text className="mt-2 text-sm leading-6 text-slate-500">
+                Curated peaks, routes, and summit details designed for quick
+                browsing on mobile.
+              </Text>
+            </View>
 
-          
+            <View className="h-12 w-12 items-center justify-center rounded-2xl bg-teal-50">
+              <Ionicons name="compass" size={22} color="#0f766e" />
+            </View>
+          </View>
         </View>
 
         {/* Hero Card */}
@@ -41,7 +58,8 @@ export default function DiscoverScreen() {
           colors={["#0f766e", "#0ea5a4"]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          className="mt-6 rounded-[30px] p-6"
+          className="mt-8 rounded-[30px] p-6"
+          style={{ borderRadius: 30, overflow: "hidden" }}
         >
           <Text className="text-xs font-semibold tracking-[2px] text-white">
             MOUNTAINMAX PICKS
@@ -59,9 +77,8 @@ export default function DiscoverScreen() {
           <Pressable className="mt-5 p-4 self-start rounded-full bg-white px-5 py-3 active:scale-[0.97]">
             <Text className="text-sm font-semibold text-slate-900">
               {/* search icon */}
-              
- <Ionicons name="search-outline" size={22} color="#0f172a" />
- 
+
+              <Ionicons name="search-outline" size={22} color="#0f172a" />
             </Text>
           </Pressable>
         </LinearGradient>
@@ -70,7 +87,7 @@ export default function DiscoverScreen() {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          className="mt-6"
+          className="mt-8"
         >
           <View className="flex-row gap-3">
             {["Popular", "Beginner", "Snow Peaks", "Asia", "Adventure"].map(
@@ -83,33 +100,38 @@ export default function DiscoverScreen() {
                     {item}
                   </Text>
                 </View>
-              )
+              ),
             )}
           </View>
         </ScrollView>
 
         {/* Featured */}
-        <View className="mt-8 flex-row items-center justify-between">
+        <View className="mt-10 flex-row items-center justify-between">
           <Text className="text-2xl font-bold text-slate-900">
             Featured Peaks
           </Text>
 
-          <Text className="text-sm font-semibold text-teal-700">
-            See all
-          </Text>
+          <Text className="text-sm font-semibold text-teal-700">See all</Text>
         </View>
 
         <View className="mt-5 gap-5">
           {featured.map((item, index) => (
             <Link key={item.id} href={`/mountain/${item.id}`} asChild>
-              <Pressable className="overflow-hidden rounded-[28px] bg-white  shadow-sm border border-slate-100 active:scale-[0.985]">
+              <Pressable
+                className="overflow-hidden rounded-[28px] border border-slate-100 bg-white active:scale-[0.985]"
+                style={{
+                  borderRadius: 28,
+                  overflow: "hidden",
+                  boxShadow: "0px 6px 20px rgba(15, 23, 42, 0.06)",
+                }}
+              >
                 {/* Image */}
                 <Image
                   source={{
                     uri:
                       index % 2 === 0
-                        ? "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80"
-                        : "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+                        ? "https://images.pexels.com/photos/18131619/pexels-photo-18131619.jpeg"
+                        : "https://images.pexels.com/photos/35066466/pexels-photo-35066466.jpeg",
                   }}
                   className="h-52 w-full"
                   resizeMode="cover"
@@ -157,11 +179,10 @@ export default function DiscoverScreen() {
         {/* Bottom CTA */}
         <LinearGradient
           colors={["#111827", "#1e293b"]}
-          className="mt-8 rounded-[28px] p-6"
+          className="mt-10 rounded-[28px] p-6"
+          style={{ borderRadius: 28, overflow: "hidden" }}
         >
-          <Text className="text-2xl font-bold text-white">
-            Ready to Scan?
-          </Text>
+          <Text className="text-2xl font-bold text-white">Ready to Scan?</Text>
 
           <Text className="mt-2 text-sm leading-6 text-white">
             Upload any mountain image and get instant intelligence.
