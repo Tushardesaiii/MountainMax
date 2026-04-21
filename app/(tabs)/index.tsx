@@ -6,8 +6,10 @@ import { Link } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Image,
   ImageBackground,
+  Linking,
   Pressable,
   ScrollView,
   Text,
@@ -28,6 +30,7 @@ export default function ScanScreen() {
   const [selectedUri, setSelectedUri] = useState<string | null>(null);
   const [mountain, setMountain] = useState<MountainInfo | null>(null);
   const [firstName, setFirstName] = useState<string>("Explorer");
+  const [isCapturing, setIsCapturing] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -68,17 +71,41 @@ export default function ScanScreen() {
   };
 
   const handleCamera = async () => {
-    const permission = await ImagePicker.requestCameraPermissionsAsync();
-    if (permission.status !== "granted") {
-      return;
-    }
+    try {
+      setIsCapturing(true);
 
-    const result = await ImagePicker.launchCameraAsync({
-      quality: 0.8,
-      allowsEditing: true,
-    });
-    if (!result.canceled && result.assets[0]?.uri) {
-      runAnalysis(result.assets[0].uri);
+      const permission = await ImagePicker.requestCameraPermissionsAsync();
+      if (permission.status !== "granted") {
+        Alert.alert(
+          "Camera Permission Needed",
+          "Please allow camera access to scan mountain photos.",
+          [
+            { text: "Not now", style: "cancel" },
+            {
+              text: "Open settings",
+              onPress: () => {
+                Linking.openSettings().catch(() => undefined);
+              },
+            },
+          ],
+        );
+        return;
+      }
+
+      const result = await ImagePicker.launchCameraAsync({
+        quality: 0.8,
+        allowsEditing: true,
+      });
+      if (!result.canceled && result.assets[0]?.uri) {
+        runAnalysis(result.assets[0].uri);
+      }
+    } catch {
+      Alert.alert(
+        "Camera Error",
+        "We could not open the camera. Please try again.",
+      );
+    } finally {
+      setIsCapturing(false);
     }
   };
 
@@ -166,13 +193,29 @@ export default function ScanScreen() {
 
             <View className="mt-3 gap-3">
               <Pressable
+                disabled={isCapturing}
                 onPress={handleCamera}
-                className="flex-row items-center justify-center gap-2 rounded-2xl bg-teal-700 py-4"
+                className={
+                  isCapturing
+                    ? "flex-row items-center justify-center gap-2 rounded-2xl bg-teal-500 py-4"
+                    : "flex-row items-center justify-center gap-2 rounded-2xl bg-teal-700 py-4"
+                }
               >
-                <Ionicons name="camera-outline" size={20} color="#ffffff" />
-                <Text className="text-base font-semibold text-white">
-                  Scan with Camera
-                </Text>
+                {isCapturing ? (
+                  <>
+                    <ActivityIndicator color="#ffffff" />
+                    <Text className="text-base font-semibold text-white">
+                      Opening camera...
+                    </Text>
+                  </>
+                ) : (
+                  <>
+                    <Ionicons name="camera-outline" size={20} color="#ffffff" />
+                    <Text className="text-base font-semibold text-white">
+                      Scan with Camera
+                    </Text>
+                  </>
+                )}
               </Pressable>
 
               <Pressable
@@ -238,14 +281,28 @@ export default function ScanScreen() {
                 resizeMode="cover"
               />
               <View className="border-t border-slate-200 bg-white px-4 py-3">
-                <Pressable
-                  onPress={() => setSelectedUri(null)}
-                  className="self-start rounded-full border border-slate-300 px-3 py-1.5"
-                >
-                  <Text className="text-xs font-medium text-slate-700">
-                    Remove photo
-                  </Text>
-                </Pressable>
+                <View className="flex-row gap-2">
+                  <Pressable
+                    onPress={handleCamera}
+                    className="rounded-full border border-slate-300 px-3 py-1.5"
+                  >
+                    <Text className="text-xs font-medium text-slate-700">
+                      Retake photo
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    onPress={() => {
+                      setSelectedUri(null);
+                      setMountain(null);
+                      setScanState("idle");
+                    }}
+                    className="rounded-full border border-slate-300 px-3 py-1.5"
+                  >
+                    <Text className="text-xs font-medium text-slate-700">
+                      Remove
+                    </Text>
+                  </Pressable>
+                </View>
               </View>
             </View>
           ) : null}
@@ -323,6 +380,15 @@ export default function ScanScreen() {
                 Try a clearer mountain photo with more landscape context, then
                 scan again.
               </Text>
+
+              <Pressable
+                onPress={handleCamera}
+                className="mt-4 items-center rounded-2xl bg-teal-700 py-3"
+              >
+                <Text className="text-sm font-semibold text-white">
+                  Try again with camera
+                </Text>
+              </Pressable>
             </View>
           ) : null}
         </ScrollView>
