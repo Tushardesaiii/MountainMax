@@ -3,9 +3,12 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 
 import { getIsLoggedIn } from "@/lib/auth";
+import { getIsOnboardingComplete } from "@/lib/onboarding";
 
 export default function Index() {
-  const [status, setStatus] = useState<"loading" | "in" | "out">("loading");
+  const [status, setStatus] = useState<"loading" | "out" | "onboarding" | "in">(
+    "loading",
+  );
 
   useEffect(() => {
     let mounted = true;
@@ -16,7 +19,17 @@ export default function Index() {
         return;
       }
 
-      setStatus(isLoggedIn ? "in" : "out");
+      if (!isLoggedIn) {
+        setStatus("out");
+        return;
+      }
+
+      const isOnboardingComplete = await getIsOnboardingComplete();
+      if (!mounted) {
+        return;
+      }
+
+      setStatus(isOnboardingComplete ? "in" : "onboarding");
     };
 
     hydrateAuth();
@@ -34,5 +47,13 @@ export default function Index() {
     );
   }
 
-  return <Redirect href={status === "in" ? "/(tabs)" : "/login"} />;
+  if (status === "out") {
+    return <Redirect href="/login" />;
+  }
+
+  if (status === "onboarding") {
+    return <Redirect href="/onboarding" />;
+  }
+
+  return <Redirect href="/(tabs)" />;
 }

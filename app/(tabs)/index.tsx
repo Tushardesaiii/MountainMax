@@ -3,18 +3,19 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Image,
-    ImageBackground,
-    Pressable,
-    ScrollView,
-    Text,
-    View,
+  ActivityIndicator,
+  Image,
+  ImageBackground,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
 } from "react-native";
 
 import { MountainInfo, detectMountainFromUri } from "@/data/mountains";
+import { getOnboardingProfile } from "@/lib/onboarding";
 
 type ScanState = "idle" | "analyzing" | "result" | "no-mountain";
 
@@ -26,6 +27,29 @@ export default function ScanScreen() {
   const [scanState, setScanState] = useState<ScanState>("idle");
   const [selectedUri, setSelectedUri] = useState<string | null>(null);
   const [mountain, setMountain] = useState<MountainInfo | null>(null);
+  const [firstName, setFirstName] = useState<string>("Explorer");
+
+  useEffect(() => {
+    let mounted = true;
+
+    const hydrateProfile = async () => {
+      const profile = await getOnboardingProfile();
+      if (!mounted || !profile?.fullName) {
+        return;
+      }
+
+      const parsed = profile.fullName.trim().split(" ")[0];
+      if (parsed) {
+        setFirstName(parsed);
+      }
+    };
+
+    hydrateProfile();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const runAnalysis = (uri: string) => {
     setSelectedUri(uri);
@@ -103,6 +127,9 @@ export default function ScanScreen() {
                 <Text className="mt-2 text-3xl font-bold text-white">
                   MountainMax
                 </Text>
+                <Text className="mt-1 text-sm text-cyan-100">
+                  Ready, {firstName}?
+                </Text>
               </View>
 
               <View className="h-14 w-14 items-center justify-center rounded-2xl border border-white/30 bg-white/15">
@@ -159,8 +186,49 @@ export default function ScanScreen() {
               </Pressable>
             </View>
 
-        
+            <View className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+              <View className="flex-row items-start gap-2">
+                <Ionicons name="sparkles-outline" size={16} color="#0f766e" />
+                <View className="flex-1">
+                  <Text className="text-xs font-semibold uppercase tracking-[1px] text-slate-700">
+                    Pro Tip
+                  </Text>
+                  <Text className="mt-1 text-xs leading-5 text-slate-600">
+                    Use daylight photos with visible ridge lines and minimal
+                    haze for the most accurate recognition.
+                  </Text>
+                </View>
+              </View>
+            </View>
           </View>
+
+          {scanState === "idle" && !selectedUri ? (
+            <View className="mt-6 rounded-3xl border border-white/70 bg-white/92 p-5">
+              <Text className="text-sm font-semibold uppercase tracking-[1.5px] text-slate-500">
+                Before You Scan
+              </Text>
+              <View className="mt-3 gap-2">
+                <View className="flex-row items-center gap-2">
+                  <Ionicons name="checkmark-circle" size={16} color="#0f766e" />
+                  <Text className="text-sm text-slate-700">
+                    Frame the full summit line
+                  </Text>
+                </View>
+                <View className="flex-row items-center gap-2">
+                  <Ionicons name="checkmark-circle" size={16} color="#0f766e" />
+                  <Text className="text-sm text-slate-700">
+                    Avoid heavy zoom and motion blur
+                  </Text>
+                </View>
+                <View className="flex-row items-center gap-2">
+                  <Ionicons name="checkmark-circle" size={16} color="#0f766e" />
+                  <Text className="text-sm text-slate-700">
+                    Include sky and terrain context
+                  </Text>
+                </View>
+              </View>
+            </View>
+          ) : null}
 
           {selectedUri ? (
             <View className="mt-6 overflow-hidden rounded-3xl border border-white/80 bg-white/85">
@@ -169,6 +237,16 @@ export default function ScanScreen() {
                 style={{ width: "100%", height: 220 }}
                 resizeMode="cover"
               />
+              <View className="border-t border-slate-200 bg-white px-4 py-3">
+                <Pressable
+                  onPress={() => setSelectedUri(null)}
+                  className="self-start rounded-full border border-slate-300 px-3 py-1.5"
+                >
+                  <Text className="text-xs font-medium text-slate-700">
+                    Remove photo
+                  </Text>
+                </Pressable>
+              </View>
             </View>
           ) : null}
 
@@ -206,6 +284,11 @@ export default function ScanScreen() {
                     {mountain.challengeLevel}
                   </Text>
                 </View>
+                <View className="rounded-full bg-alpine-100 px-3 py-2">
+                  <Text className="text-xs font-medium text-teal-800">
+                    {mountain.bestSeason}
+                  </Text>
+                </View>
               </View>
 
               <Link href={`/mountain/${mountain.id}`} asChild>
@@ -215,6 +298,19 @@ export default function ScanScreen() {
                   </Text>
                 </Pressable>
               </Link>
+
+              <Pressable
+                onPress={() => {
+                  setScanState("idle");
+                  setSelectedUri(null);
+                  setMountain(null);
+                }}
+                className="mt-3 items-center rounded-2xl border border-slate-300 bg-white py-3"
+              >
+                <Text className="text-sm font-semibold text-slate-700">
+                  Scan another photo
+                </Text>
+              </Pressable>
             </View>
           ) : null}
 
